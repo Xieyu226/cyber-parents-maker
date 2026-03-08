@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>赛博父母生成器</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>赛博父母生成器</h1>
+        <p class="subtitle">为你生成充满爱意的赛博父母，抵御网络恶意</p>
+        
+        <div class="parent-container">
+            <div class="parent-card" id="father-card">
+                <h2>赛博父亲</h2>
+                <div class="parent-info">
+                    <p class="attribute">姓名: <span id="father-name">--</span></p>
+                    <p class="attribute">职业: <span id="father-job">--</span></p>
+                    <p class="attribute">特质: <span id="father-trait">--</span></p>
+                    <p class="attribute">寄语: <span id="father-message">--</span></p>
+                </div>
+            </div>
+            
+            <div class="parent-card" id="mother-card">
+                <h2>赛博母亲</h2>
+                <div class="parent-info">
+                    <p class="attribute">姓名: <span id="mother-name">--</span></p>
+                    <p class="attribute">职业: <span id="mother-job">--</span></p>
+                    <p class="attribute">特质: <span id="mother-trait">--</span></p>
+                    <p class="attribute">寄语: <span id="mother-message">--</span></p>
+                </div>
+            </div>
+        </div>
+        
+        <button id="generate-btn">生成赛博父母</button>
+        
+        <div class="stats-box">
+            <p>已生成赛博父母: <span id="generate-count">0</span> 对</p>
+        </div>
+        
+        <div class="sync-box">
+            <h3>跨设备同步</h3>
+            <p>导出数据:</p>
+            <button id="export-btn">导出数据</button>
+            <textarea id="export-data" readonly placeholder="导出的数据将显示在这里"></textarea>
+            <p>导入数据:</p>
+            <textarea id="import-data" placeholder="粘贴导出的数据到这里"></textarea>
+            <button id="import-btn">导入数据</button>
+        </div>
+        
+        <div class="message-box" id="message-box">
+            <p id="message">点击按钮生成你的赛博父母</p>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
