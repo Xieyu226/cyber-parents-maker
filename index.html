@@ -36,6 +36,7 @@
         <div class="button-container">
             <button id="generate-btn">生成赛博父母</button>
             <button id="delete-btn">删除当前父母</button>
+            <button id="theme-btn">切换主题</button>
         </div>
         
         <div class="stats-box">
@@ -45,22 +46,8 @@
         <div class="sync-box">
             <h3>跨设备同步</h3>
             <div class="sync-option">
-                <h4>方式一: 二维码同步</h4>
-                <button id="export-qr-btn">生成二维码</button>
-                <div id="qrcode-container" class="qrcode-container"></div>
-                <p>扫描二维码即可在其他设备上导入数据</p>
-            </div>
-            <div class="sync-option">
-                <h4>方式二: 令牌同步</h4>
-                <button id="export-token-btn">生成令牌</button>
-                <input type="text" id="token-output" readonly placeholder="生成的令牌将显示在这里">
-                <p>在其他设备上输入令牌:</p>
-                <input type="text" id="token-input" placeholder="输入令牌">
-                <button id="import-token-btn">导入令牌</button>
-            </div>
-            <div class="sync-option">
-                <h4>方式三: 手动同步</h4>
-                <p>导出数据:</p>
+                <h4>手动同步</h4>
+                <p>导出数据 (最多15条记录):</p>
                 <button id="export-btn">导出数据</button>
                 <textarea id="export-data" readonly placeholder="导出的数据将显示在这里"></textarea>
                 <p>导入数据:</p>
