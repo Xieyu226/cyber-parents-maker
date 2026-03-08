@@ -3,12 +3,16 @@ const parentData = {
     // 父亲名字
     fatherNames: [
         "张伟", "李刚", "王强", "刘建国", "陈勇", "赵军", "孙明", "周健", "吴忠", "郑华",
-        "杨磊", "黄辉", "马骏", "朱峰", "胡伟", "林达", "何东", "高翔", "罗阳", "梁峰"
+        "杨磊", "黄辉", "马骏", "朱峰", "胡伟", "林达", "何东", "高翔", "罗阳", "梁峰",
+        "陈明", "黄伟", "赵刚", "孙强", "周明", "吴刚", "郑军", "杨明", "黄军", "马明",
+        "朱强", "胡刚", "林强", "何明", "高伟", "罗明", "梁伟", "陈军", "黄刚", "赵伟"
     ],
     // 母亲名字
     motherNames: [
         "王芳", "李娜", "张艳", "刘敏", "陈丽", "赵静", "孙美", "周琴", "吴梅", "郑华",
-        "杨雪", "黄燕", "马丽", "朱婷", "胡蓉", "林秀", "何英", "高佳", "罗莉", "梁艳"
+        "杨雪", "黄燕", "马丽", "朱婷", "胡蓉", "林秀", "何英", "高佳", "罗莉", "梁艳",
+        "王梅", "李丽", "张琴", "刘芳", "陈静", "赵艳", "孙婷", "周丽", "吴芳", "郑梅",
+        "杨芳", "黄丽", "马燕", "朱静", "胡丽", "林芳", "何丽", "高艳", "罗芳", "梁丽"
     ],
     // 父亲职业
     fatherJobs: [
@@ -41,7 +45,17 @@ const parentData = {
         "爸爸永远爱你，支持你，保护你。",
         "你值得被爱，值得被尊重，不要被别人的语言伤害。",
         "爸爸以你为荣，不管你做什么，爸爸都支持你。",
-        "记住，你是独一无二的，别人的评价不能定义你。"
+        "记住，你是独一无二的，别人的评价不能定义你。",
+        "爸爸知道你受委屈了，没关系，一切都会过去的。",
+        "你已经做得很好了，爸爸为你感到自豪。",
+        "不管别人怎么说，在爸爸眼里你永远是最好的。",
+        "爸爸会一直陪伴在你身边，和你一起面对一切。",
+        "你的善良和努力，爸爸都看在眼里，记在心里。",
+        "不要因为别人的错误而惩罚自己，你值得所有的美好。",
+        "爸爸相信你的能力，你一定能够克服困难。",
+        "无论发生什么，爸爸永远是你最坚强的后盾。",
+        "你是爸爸生命中最珍贵的礼物，爸爸永远爱你。",
+        "记住，爸爸永远在你身后，为你加油打气。"
     ],
     // 母亲寄语
     motherMessages: [
@@ -54,7 +68,17 @@ const parentData = {
         "妈妈永远在你身后，做你最坚强的后盾。",
         "你值得所有的美好，不要让别人的语言影响你。",
         "妈妈以你为傲，你是妈妈最爱的宝贝。",
-        "记住，你是妈妈的心头肉，别人的评价不重要。"
+        "记住，你是妈妈的心头肉，别人的评价不重要。",
+        "宝贝，妈妈知道你受委屈了，来妈妈怀里哭一会吧。",
+        "你已经做得很好了，妈妈为你感到骄傲。",
+        "不管别人怎么说，在妈妈眼里你永远是最棒的。",
+        "妈妈会一直守护着你，不让你受一点伤害。",
+        "你的善良和努力，妈妈都看在眼里，记在心里。",
+        "不要因为别人的错误而伤心，你值得所有的幸福。",
+        "妈妈相信你的能力，你一定能够度过难关。",
+        "无论发生什么，妈妈永远是你最温暖的港湾。",
+        "你是妈妈生命中最美好的存在，妈妈永远爱你。",
+        "记住，妈妈永远在你身边，为你加油鼓气。"
     ]
 };
 
@@ -121,7 +145,7 @@ function generateParents() {
 
 // 删除当前父母，回退到上一个
 function deleteParent() {
-    if (parentHistory.length <= 1) {
+    if (parentHistory.length === 0) {
         document.getElementById('message').textContent = "已经没有更多赛博父母可以删除了";
         return;
     }
@@ -135,9 +159,15 @@ function deleteParent() {
     localStorage.setItem('generateCount', generateCount.toString());
     localStorage.setItem('parentHistory', JSON.stringify(parentHistory));
     
-    // 显示上一个父母信息
-    const lastParent = parentHistory[parentHistory.length - 1];
-    updateDisplay({ father: lastParent.father, mother: lastParent.mother });
+    // 如果还有历史记录，显示上一个父母信息
+    if (parentHistory.length > 0) {
+        const lastParent = parentHistory[parentHistory.length - 1];
+        updateDisplay({ father: lastParent.father, mother: lastParent.mother });
+    } else {
+        // 如果没有历史记录，生成新的父母
+        const parents = generateParents();
+        updateDisplay(parents);
+    }
     
     // 更新消息
     document.getElementById('message').textContent = "抱抱，又一对赛博父母离你而去了~~~";
@@ -347,12 +377,18 @@ document.getElementById('export-qr-btn').addEventListener('click', generateQRCod
 // 删除按钮点击事件
 document.getElementById('delete-btn').addEventListener('click', deleteParent);
 
-// 页面加载时生成初始父母
+// 页面加载时初始化
 window.addEventListener('load', function() {
     // 更新计数显示
     document.getElementById('generate-count').textContent = generateCount;
     
-    // 生成初始父母
-    const parents = generateParents();
-    updateDisplay(parents);
+    // 如果没有历史记录，生成初始父母
+    if (parentHistory.length === 0) {
+        const parents = generateParents();
+        updateDisplay(parents);
+    } else {
+        // 显示最后一个父母信息
+        const lastParent = parentHistory[parentHistory.length - 1];
+        updateDisplay({ father: lastParent.father, mother: lastParent.mother });
+    }
 });
