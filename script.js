@@ -119,6 +119,30 @@ function generateParents() {
     return { father, mother };
 }
 
+// 删除当前父母，回退到上一个
+function deleteParent() {
+    if (parentHistory.length <= 1) {
+        document.getElementById('message').textContent = "已经没有更多赛博父母可以删除了";
+        return;
+    }
+    
+    // 移除最后一个记录
+    parentHistory.pop();
+    // 减少计数
+    generateCount = Math.max(0, generateCount - 1);
+    
+    // 保存到本地存储
+    localStorage.setItem('generateCount', generateCount.toString());
+    localStorage.setItem('parentHistory', JSON.stringify(parentHistory));
+    
+    // 显示上一个父母信息
+    const lastParent = parentHistory[parentHistory.length - 1];
+    updateDisplay({ father: lastParent.father, mother: lastParent.mother });
+    
+    // 更新消息
+    document.getElementById('message').textContent = "抱抱，又一对赛博父母离你而去了~~~";
+}
+
 // 更新页面显示
 function updateDisplay(parents) {
     // 更新父亲信息
@@ -319,6 +343,9 @@ document.getElementById('import-token-btn').addEventListener('click', importToke
 
 // 生成二维码按钮点击事件
 document.getElementById('export-qr-btn').addEventListener('click', generateQRCode);
+
+// 删除按钮点击事件
+document.getElementById('delete-btn').addEventListener('click', deleteParent);
 
 // 页面加载时生成初始父母
 window.addEventListener('load', function() {
