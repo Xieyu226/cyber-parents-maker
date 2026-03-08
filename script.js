@@ -349,6 +349,24 @@ function toggleTheme() {
     document.getElementById('message').textContent = isDark ? "已切换到黑夜模式" : "已切换到亮色模式";
 }
 
+// 清除所有父母
+function clearAllParents() {
+    // 清除本地存储
+    localStorage.removeItem('parentHistory');
+    localStorage.removeItem('generateCount');
+    
+    // 重置变量
+    parentHistory = [];
+    generateCount = 0;
+    
+    // 生成新的父母
+    const parents = generateParents();
+    updateDisplay(parents);
+    
+    // 更新消息
+    document.getElementById('message').textContent = "已清除所有赛博父母，重新开始";
+}
+
 // 按钮点击事件
 document.getElementById('generate-btn').addEventListener('click', function() {
     const parents = generateParents();
@@ -366,6 +384,9 @@ document.getElementById('delete-btn').addEventListener('click', deleteParent);
 
 // 主题切换按钮点击事件
 document.getElementById('theme-btn').addEventListener('click', toggleTheme);
+
+// 清除按钮点击事件
+document.getElementById('clear-btn').addEventListener('click', clearAllParents);
 
 // 页面加载时初始化
 window.addEventListener('load', function() {
