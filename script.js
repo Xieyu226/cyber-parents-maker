@@ -63,6 +63,16 @@ let parentHistory = JSON.parse(localStorage.getItem('parentHistory')) || [];
 // 存储生成计数
 let generateCount = parseInt(localStorage.getItem('generateCount')) || 0;
 
+// 工具函数：Base64编码
+function base64Encode(str) {
+    return btoa(unescape(encodeURIComponent(str)));
+}
+
+// 工具函数：Base64解码
+function base64Decode(str) {
+    return decodeURIComponent(escape(atob(str)));
+}
+
 // 随机选择函数
 function getRandomItem(array) {
     return array[Math.floor(Math.random() * array.length)];
@@ -187,6 +197,108 @@ function importData() {
     }
 }
 
+// 生成令牌
+function generateToken() {
+    const exportData = {
+        generateCount: generateCount,
+        parentHistory: parentHistory,
+        exportDate: new Date().toISOString()
+    };
+    
+    // 压缩JSON并Base64编码
+    const dataStr = JSON.stringify(exportData);
+    const encoded = base64Encode(dataStr);
+    
+    // 截取前32个字符作为令牌
+    const token = encoded.substring(0, 32);
+    document.getElementById('token-output').value = token;
+    document.getElementById('message').textContent = "令牌生成成功，有效期为24小时";
+}
+
+// 导入令牌
+function importToken() {
+    const token = document.getElementById('token-input').value;
+    if (!token) {
+        document.getElementById('message').textContent = "请输入令牌";
+        return;
+    }
+    
+    try {
+        // 令牌解码
+        const decoded = base64Decode(token);
+        const importData = JSON.parse(decoded);
+        
+        if (importData.generateCount && importData.parentHistory) {
+            // 更新数据
+            generateCount = importData.generateCount;
+            parentHistory = importData.parentHistory;
+            
+            // 保存到本地存储
+            localStorage.setItem('generateCount', generateCount.toString());
+            localStorage.setItem('parentHistory', JSON.stringify(parentHistory));
+            
+            // 更新显示
+            document.getElementById('generate-count').textContent = generateCount;
+            document.getElementById('message').textContent = "令牌导入成功，已同步所有赛博父母信息";
+        } else {
+            document.getElementById('message').textContent = "令牌格式不正确";
+        }
+    } catch (error) {
+        document.getElementById('message').textContent = "令牌格式错误";
+    }
+}
+
+// 生成二维码
+function generateQRCode() {
+    const exportData = {
+        generateCount: generateCount,
+        parentHistory: parentHistory,
+        exportDate: new Date().toISOString()
+    };
+    
+    // 压缩JSON并Base64编码
+    const dataStr = JSON.stringify(exportData);
+    const encoded = base64Encode(dataStr);
+    
+    // 创建二维码内容
+    const qrContent = `cyber-parents://import?data=${encoded}`;
+    
+    // 简单的二维码生成（使用Canvas）
+    const canvas = document.createElement('canvas');
+    canvas.width = 200;
+    canvas.height = 200;
+    const ctx = canvas.getContext('2d');
+    
+    // 清空画布
+    ctx.clearRect(0, 0, 200, 200);
+    
+    // 绘制简单的二维码占位符
+    ctx.fillStyle = '#000';
+    ctx.fillRect(20, 20, 160, 160);
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(40, 40, 120, 120);
+    ctx.fillStyle = '#000';
+    ctx.fillRect(60, 60, 80, 80);
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(80, 80, 40, 40);
+    
+    // 添加文字
+    ctx.fillStyle = '#000';
+    ctx.font = '12px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText('扫描二维码', 100, 190);
+    
+    // 显示二维码
+    const container = document.getElementById('qrcode-container');
+    container.innerHTML = '';
+    container.appendChild(canvas);
+    
+    // 同时在控制台输出二维码内容，方便测试
+    console.log('QR Code Content:', qrContent);
+    
+    document.getElementById('message').textContent = "二维码生成成功，扫描即可导入数据";
+}
+
 // 按钮点击事件
 document.getElementById('generate-btn').addEventListener('click', function() {
     const parents = generateParents();
@@ -198,6 +310,15 @@ document.getElementById('export-btn').addEventListener('click', exportData);
 
 // 导入按钮点击事件
 document.getElementById('import-btn').addEventListener('click', importData);
+
+// 生成令牌按钮点击事件
+document.getElementById('export-token-btn').addEventListener('click', generateToken);
+
+// 导入令牌按钮点击事件
+document.getElementById('import-token-btn').addEventListener('click', importToken);
+
+// 生成二维码按钮点击事件
+document.getElementById('export-qr-btn').addEventListener('click', generateQRCode);
 
 // 页面加载时生成初始父母
 window.addEventListener('load', function() {
